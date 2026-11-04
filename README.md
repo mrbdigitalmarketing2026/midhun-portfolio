@@ -1,52 +1,168 @@
 # Midhun Balachandran — Personal Portfolio
 
-A Django starter project for a premium dark black-and-purple personal portfolio.
+**Digital Marketer | Video Creator | Entrepreneur**
 
-## 1. Create and activate a virtual environment (Windows PowerShell)
+Welcome to my personal portfolio repository. This project showcases my professional experience, creative work, digital marketing services, technical skills and business projects.
 
-```powershell
-py -m venv .venv
-.venv\Scripts\Activate.ps1
+I am the Founder & Managing Director of **MRB Digital Marketing & Advertising**, based in Palakkad, Kerala, India.
+
+## 🌐 Portfolio Overview
+
+A premium, responsive personal portfolio website developed using Django, Python and modern frontend technologies.
+
+The website is designed to introduce my professional journey, showcase selected projects and help potential clients connect with me.
+
+## ✨ Website Features
+
+- Premium dark black and purple design.
+- Professional introduction and About section.
+- Digital marketing and creative service showcase.
+- Selected client projects and portfolio work.
+- Skills and tools section.
+- Contact and enquiry form.
+- Django Admin enquiry management dashboard.
+- Client priority and lead-source tracking.
+- Follow-up management and activity history.
+- Google Sheets enquiry integration.
+- Email notifications for new enquiries.
+- Responsive website layout.
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| Python | Backend programming |
+| Django | Web framework |
+| HTML5 | Website structure |
+| CSS3 | Styling and responsive design |
+| JavaScript | Frontend interactions |
+| SQLite | Local development database |
+| Google Sheets | Enquiry tracking integration |
+
+## 📁 Project Structure
+
+```text
+midhun_portfolio/
+│
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+│
+├── core/
+│   ├── migrations/
+│   ├── templates/
+│   ├── admin.py
+│   ├── models.py
+│   └── views.py
+│
+├── static/
+│   ├── css/
+│   ├── images/
+│   └── js/
+│
+├── templates/
+│   ├── base.html
+│   └── home.html
+│
+├── manage.py
+├── requirements.txt
+└── README.md
 ```
 
-If PowerShell blocks activation, use Command Prompt:
-```bat
-.venv\Scripts\activate.bat
+## 💻 Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/mrbdigitalmarketing2026/midhun-portfolio.git
+cd midhun-portfolio
 ```
 
-## 2. Install dependencies
+### 2. Create a virtual environment
 
-```powershell
+```bash
+python -m venv mid
+```
+
+### 3. Activate the environment
+
+Windows Command Prompt:
+
+```cmd
+mid\Scripts\activate
+```
+
+### 4. Install dependencies
+
+```bash
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## 3. Run database migrations and create an admin user
+### 5. Configure environment variables
 
-```powershell
+Create a `.env` file in the project root.
+
+Add your own secure configuration:
+
+```env
+SECRET_KEY=your-secure-django-secret-key
+DEBUG=True
+GOOGLE_SHEETS_WEBHOOK_URL=
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+```
+
+Never upload your `.env` file or expose private credentials.
+
+### 6. Run database migrations
+
+```bash
 python manage.py migrate
+```
+
+### 7. Create an admin account
+
+```bash
 python manage.py createsuperuser
 ```
 
-## 4. Start the development server
+### 8. Start the development server
 
-```powershell
+```bash
 python manage.py runserver
 ```
 
-Open http://127.0.0.1:8000/ in your browser.
-Admin: http://127.0.0.1:8000/admin/
+Open:
 
-## 5. Add your photograph
+- Website: http://127.0.0.1:8000/
+- Admin Dashboard: http://127.0.0.1:8000/admin/
 
-Copy your professional photo into:
-`static/images/midhun-profile.jpg`
+## 📸 Portfolio Projects
 
-Use a clear, high-resolution portrait. The homepage has a styled placeholder until this file is added.
+Selected work includes projects involving:
 
-## Notes
+- Magic Touch Beauty Salon
+- La Belle Salon & Bridal Studio
+- MRB Digital Marketing & Advertising
 
-- This is a fresh, standalone project. It does not connect to or modify any other app or database.
-- SQLite is used for local development.
-- Before public deployment, set a secure `SECRET_KEY`, `DEBUG=False`, allowed hosts, HTTPS, and a production database.
-- Replace the sample email/social links and project placeholders with confirmed details before publishing.
+## 📬 Contact
+
+**Midhun Balachandran**
+
+Founder & Managing Director — MRB Digital Marketing & Advertising
+
+- Location: Palakkad, Kerala, India
+- Phone: +91 9074492032
+- Email: mrb.info.x@gmail.com
+
+## 🔗 Repository
+
+[GitHub — Midhun Portfolio](https://github.com/mrbdigitalmarketing2026/midhun-portfolio)
+
+---
+
+**Built with Python, Django and creativity.**
+
+© Midhun Balachandran. All rights reserved.
