@@ -1,0 +1,809 @@
+
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+
+<style>
+.dashboard-wrapper {
+    margin-bottom: 28px;
+}
+
+.dashboard-heading {
+    font-size: 23px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 15px 0 5px;
+}
+
+.dashboard-subtitle {
+    color: #aaa0ba;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.dashboard-card {
+    background: #211b30;
+    padding: 22px;
+    border-radius: 12px;
+    border: 1px solid #382c4c;
+    border-left: 5px solid #9161d5;
+    color: white;
+}
+
+.dashboard-card.new {
+    border-left-color: #e5a23b;
+}
+
+.dashboard-card.converted {
+    border-left-color: #36b88b;
+}
+
+.dashboard-card.rate {
+    border-left-color: #4b9de8;
+}
+/* Follow-up Management Cards */
+
+.dashboard-card.overdue {
+    border-left-color: #e05252;
+}
+
+.dashboard-card.today {
+    border-left-color: #e5a23b;
+}
+
+.dashboard-card.upcoming {
+    border-left-color: #4b9de8;
+}
+
+.dashboard-card.completed {
+    border-left-color: #36b88b;
+}
+
+.followup-heading {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 30px 0 6px;
+}
+
+.followup-subtitle {
+    color: #aaa0ba;
+    font-size: 13px;
+    margin-bottom: 18px;
+}
+
+.dashboard-card-label {
+    font-size: 12px;
+    color: #c6b4e6;
+    font-weight: 600;
+    letter-spacing: 0.7px;
+}
+
+.dashboard-card-value {
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 8px;
+    color: #ffffff;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-panel {
+    background: #211b30;
+    border: 1px solid #382c4c;
+    border-radius: 12px;
+    padding: 22px;
+    min-width: 0;
+}
+
+.dashboard-panel h3 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 22px;
+}
+
+.dashboard-row {
+    margin-bottom: 18px;
+}
+
+.dashboard-row:last-child {
+    margin-bottom: 0;
+}
+
+.dashboard-row-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: #ded5eb;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.dashboard-row-info strong {
+    color: #ffffff;
+}
+
+.dashboard-track {
+    height: 8px;
+    background: #382d49;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.dashboard-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7738d7, #bd83ff);
+    border-radius: 20px;
+    transition: width 0.5s ease;
+}
+
+.dashboard-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #382c4c;
+    color: #ded5eb;
+    font-size: 13px;
+}
+
+.dashboard-status:last-child {
+    border-bottom: none;
+}
+
+.dashboard-status strong {
+    color: #ffffff;
+    font-size: 15px;
+}
+
+.dashboard-empty {
+    color: #aaa0ba;
+    font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Monthly Performance Chart */
+
+.monthly-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 14px;
+    height: 230px;
+    padding: 15px 5px 0;
+    border-bottom: 1px solid #49375e;
+}
+
+.monthly-chart-column {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 9px;
+}
+
+.monthly-chart-value {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.monthly-chart-track {
+    width: 100%;
+    max-width: 48px;
+    height: 165px;
+    display: flex;
+    align-items: flex-end;
+    background: #30263d;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+}
+
+.monthly-chart-fill {
+    width: 100%;
+    height: 0;
+    background: linear-gradient(180deg, #bd83ff, #7738d7);
+    border-radius: 8px 8px 0 0;
+    transition: height 0.6s ease;
+}
+
+.monthly-chart-label {
+    color: #c6b4e6;
+    font-size: 11px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Client Follow-up Lists */
+
+.followup-lists-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 25px;
+}
+
+.followup-list-panel {
+    background: #211b30;
+    border: 1px solid #382c4c;
+    border-radius: 12px;
+    padding: 22px;
+    overflow-x: auto;
+}
+
+.followup-list-panel h3 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 18px;
+}
+
+.followup-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ded5eb;
+    font-size: 13px;
+}
+
+.followup-table th {
+    color: #c6b4e6;
+    text-align: left;
+    padding: 12px 10px;
+    border-bottom: 1px solid #49375e;
+    white-space: nowrap;
+}
+
+.followup-table td {
+    padding: 13px 10px;
+    border-bottom: 1px solid #382c4c;
+    vertical-align: top;
+}
+
+.followup-table tr:last-child td {
+    border-bottom: none;
+}
+
+.followup-table strong {
+    color: #ffffff;
+}
+
+.followup-client-link {
+    color: #bd83ff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.followup-client-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* WhatsApp Contact Button */
+
+.followup-whatsapp {
+    display: inline-block;
+    background: #167c50;
+    color: #ffffff !important;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background 0.2s ease;
+}
+
+.followup-whatsapp:hover {
+    background: #20a568;
+    color: #ffffff !important;
+}
+
+.followup-empty {
+    color: #aaa0ba;
+    font-size: 13px;
+    padding: 12px 0;
+}
+
+.followup-date {
+    white-space: nowrap;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.followup-phone {
+    white-space: nowrap;
+}
+
+</style>
+
+
+<div class="dashboard-wrapper">
+
+    <!-- Dashboard Heading -->
+
+    <div class="dashboard-heading">
+        Business Performance Dashboard
+    </div>
+
+    <div class="dashboard-subtitle">
+        Overview of your portfolio enquiries and client performance
+    </div>
+
+
+    <!-- Main Statistics Cards -->
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">
+                TOTAL ENQUIRIES
+            </div>
+            <div class="dashboard-card-value">
+                {{ total_enquiries }}
+            </div>
+        </div>
+
+        <div class="dashboard-card new">
+            <div class="dashboard-card-label">
+                NEW LEADS
+            </div>
+            <div class="dashboard-card-value">
+                {{ new_leads }}
+            </div>
+        </div>
+
+        <div class="dashboard-card converted">
+            <div class="dashboard-card-label">
+                CONVERTED CLIENTS
+            </div>
+            <div class="dashboard-card-value">
+                {{ converted_clients }}
+            </div>
+        </div>
+
+        <div class="dashboard-card rate">
+            <div class="dashboard-card-label">
+                CONVERSION RATE
+            </div>
+            <div class="dashboard-card-value">
+                {{ conversion_rate }}%
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Client Follow-up Management -->
+
+    <div class="followup-heading">
+        Client Follow-up Management
+    </div>
+
+    <div class="followup-subtitle">
+        Track pending client calls and scheduled follow-ups
+    </div>
+
+    <div class="dashboard-cards">
+
+        <div class="dashboard-card overdue">
+            <div class="dashboard-card-label">
+                OVERDUE FOLLOW-UPS
+            </div>
+            <div class="dashboard-card-value">
+                {{ overdue_followups }}
+            </div>
+        </div>
+
+        <div class="dashboard-card today">
+            <div class="dashboard-card-label">
+                DUE TODAY
+            </div>
+            <div class="dashboard-card-value">
+                {{ today_followups }}
+            </div>
+        </div>
+
+        <div class="dashboard-card upcoming">
+            <div class="dashboard-card-label">
+                UPCOMING FOLLOW-UPS
+            </div>
+            <div class="dashboard-card-value">
+                {{ upcoming_followups }}
+            </div>
+        </div>
+
+        <div class="dashboard-card completed">
+            <div class="dashboard-card-label">
+                COMPLETED FOLLOW-UPS
+            </div>
+            <div class="dashboard-card-value">
+                {{ completed_followups }}
+            </div>
+        </div>
+
+    </div>
+
+        <!-- Client Follow-up Lists -->
+
+    <div class="followup-lists-grid">
+
+        <!-- Overdue Clients -->
+
+        <div class="followup-list-panel">
+
+            <h3>Overdue Client Follow-ups</h3>
+
+            {% if overdue_followup_list %}
+
+                <table class="followup-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Phone</th>
+                            <th>Service</th>
+                            <th>Follow-up Date</th>
+                            <th>Notes</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in overdue_followup_list %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'admin:core_contactmessage_change' item.pk %}"
+                                    class="followup-client-link">
+                                        {{ item.name }}
+                                    </a>
+                                </td>
+                                <td class="followup-phone">{{ item.phone }}</td>
+                                <td>{{ item.service|default:"—" }}</td>
+                                <td class="followup-date">
+                                    {{ item.follow_up_date|date:"d M Y" }}
+                                </td>
+                                <td>{{ item.follow_up_notes|default:"—"|truncatechars:70 }}</td>
+                                <td>
+                                    <a href="https://wa.me/91{{ item.phone|cut:'+91'|cut:' ' }}?text=Hello%20{{ item.name|urlencode }},%20this%20is%20Midhun.%20I%20am%20following%20up%20regarding%20your%20enquiry."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="followup-whatsapp">
+                                        WhatsApp
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <div class="followup-empty">
+                    No overdue client follow-ups. Great work!
+                </div>
+
+            {% endif %}
+
+        </div>
+                <!-- Today's Follow-ups -->
+
+        <div class="followup-list-panel">
+
+            <h3>Today's Client Follow-ups</h3>
+
+            {% if today_followup_list %}
+
+                <table class="followup-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Phone</th>
+                            <th>Service</th>
+                            <th>Follow-up Date</th>
+                            <th>Notes</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in today_followup_list %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'admin:core_contactmessage_change' item.pk %}"
+                                    class="followup-client-link">
+                                        {{ item.name }}
+                                    </a>
+                                </td>
+                                <td class="followup-phone">{{ item.phone }}</td>
+                                <td>{{ item.service|default:"—" }}</td>
+                                <td class="followup-date">
+                                    {{ item.follow_up_date|date:"d M Y" }}
+                                </td>
+                                <td>{{ item.follow_up_notes|default:"—"|truncatechars:70 }}</td>
+                                <td>
+                                    <a href="https://wa.me/91{{ item.phone|cut:'+91'|cut:' ' }}?text=Hello%20{{ item.name|urlencode }},%20this%20is%20Midhun.%20I%20am%20following%20up%20regarding%20your%20enquiry."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="followup-whatsapp">
+                                        WhatsApp
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <div class="followup-empty">
+                    No client follow-ups scheduled for today.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+                <!-- Upcoming Follow-ups -->
+
+        <div class="followup-list-panel">
+
+            <h3>Upcoming Client Follow-ups</h3>
+
+            {% if upcoming_followup_list %}
+
+                <table class="followup-table">
+                    <thead>
+                        <tr>
+                            <th>Client</th>
+                            <th>Phone</th>
+                            <th>Service</th>
+                            <th>Follow-up Date</th>
+                            <th>Notes</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for item in upcoming_followup_list %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'admin:core_contactmessage_change' item.pk %}"
+                                    class="followup-client-link">
+                                        {{ item.name }}
+                                    </a>
+                                </td>
+                                <td class="followup-phone">{{ item.phone }}</td>
+                                <td>{{ item.service|default:"—" }}</td>
+                                <td class="followup-date">
+                                    {{ item.follow_up_date|date:"d M Y" }}
+                                </td>
+                                <td>{{ item.follow_up_notes|default:"—"|truncatechars:70 }}</td>
+                                <td>
+                                    <a href="https://wa.me/91{{ item.phone|cut:'+91'|cut:' ' }}?text=Hello%20{{ item.name|urlencode }},%20this%20is%20Midhun.%20I%20am%20following%20up%20regarding%20your%20enquiry."
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="followup-whatsapp">
+                                        WhatsApp
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            {% else %}
+
+                <div class="followup-empty">
+                    No upcoming client follow-ups scheduled.
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+
+    <!-- Analytics Grid -->
+
+    <div class="dashboard-grid">
+
+        
+        <!-- Monthly Enquiry Performance Chart -->
+
+        <div class="dashboard-panel">
+
+            <h3>Monthly Enquiry Performance</h3>
+
+            {% if monthly_stats %}
+
+                <div class="monthly-chart">
+
+                    {% for item in monthly_stats %}
+
+                        <div class="monthly-chart-column">
+
+                            <div class="monthly-chart-value">
+                                {{ item.total }}
+                            </div>
+
+                            <div class="monthly-chart-track">
+
+                                <div class="monthly-chart-fill"
+                                    data-height="{{ item.percentage }}">
+                                </div>
+
+                            </div>
+
+                            <div class="monthly-chart-label">
+                                {{ item.month|date:"M" }}
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="dashboard-empty">
+                    No monthly enquiry data available yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+
+        <!-- Most Requested Services -->
+
+        <div class="dashboard-panel">
+
+            <h3>Most Requested Services</h3>
+
+            {% if service_stats %}
+
+                {% for item in service_stats %}
+
+                    <div class="dashboard-row">
+
+                        <div class="dashboard-row-info">
+                            <span>{{ item.service }}</span>
+                            <strong>{{ item.total }}</strong>
+                        </div>
+
+                        <div class="dashboard-track">
+                            <div class="dashboard-fill"
+                                data-width="{{ item.percentage }}">
+                            </div>
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="dashboard-empty">
+                    No service enquiry data available yet.
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- Enquiry Status Breakdown -->
+
+        <div class="dashboard-panel">
+
+            <h3>Enquiry Status Breakdown</h3>
+
+            <div class="dashboard-status">
+                <span>New Leads</span>
+                <strong>{{ new_leads }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Contacted</span>
+                <strong>{{ contacted }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>In Discussion</span>
+                <strong>{{ in_discussion }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Converted</span>
+                <strong>{{ converted_clients }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Rejected</span>
+                <strong>{{ rejected }}</strong>
+            </div>
+
+        </div>
+
+
+        <!-- Performance Summary -->
+
+        <div class="dashboard-panel">
+
+            <h3>Performance Summary</h3>
+
+            <div class="dashboard-status">
+                <span>Total Enquiries</span>
+                <strong>{{ total_enquiries }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Successful Conversions</span>
+                <strong>{{ converted_clients }}</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Conversion Rate</span>
+                <strong>{{ conversion_rate }}%</strong>
+            </div>
+
+            <div class="dashboard-status">
+                <span>Pending Leads</span>
+                <strong>{{ new_leads|add:contacted|add:in_discussion }}</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    // Service and monthly horizontal progress bars
+    document.querySelectorAll(".dashboard-fill").forEach(function(bar) {
+        bar.style.width = bar.dataset.width + "%";
+    });
+
+    // Monthly vertical chart bars
+    document.querySelectorAll(".monthly-chart-fill").forEach(function(bar) {
+        bar.style.height = bar.dataset.height + "%";
+    });
+</script>
+
+<!-- Preserve Existing Django Admin Enquiry Table -->
+
+
+{{ block.super }}
+
+{% endblock %}
