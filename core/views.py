@@ -205,18 +205,33 @@ def home(request):
                     </div>
                     """
 
-                    email = EmailMultiAlternatives(
-                        subject=subject,
-                        body=email_body,
-                        from_email=settings.DEFAULT_FROM_EMAIL,
-                        to=[settings.ENQUIRY_NOTIFICATION_EMAIL],
-                        reply_to=[enquiry.email],
+                    resend_api_key = settings.RESEND_API_KEY
+
+                    if not resend_api_key:
+                        raise ValueError("Resend API key is not configured.")
+
+                    resend_response = requests.post(
+                        "https://api.resend.com/emails",
+                        headers={
+                            "Authorization": f"Bearer {resend_api_key}",
+                            "Content-Type": "application/json",
+                        },
+                        json={
+                            "from": settings.DEFAULT_FROM_EMAIL,
+                            "to": [settings.ENQUIRY_NOTIFICATION_EMAIL],
+                            "subject": subject,
+                            "text": email_body,
+                            "html": html_content,
+                            "reply_to": enquiry.email,
+                        },
+                        timeout=20,
                     )
 
-                    email.attach_alternative(html_content, "text/html")
-                    email.send(fail_silently=False)
+                    logger.info("Resend API HTTP status: %s", resend_response.status_code)
 
-                    logger.info("Premium HTML enquiry notification sent successfully.")
+                    resend_response.raise_for_status()
+
+                    logger.info("Premium HTML enquiry notification sent successfully through Resend.")
 
                 except Exception as error:
                     logger.exception("Email notification failed: %s", error)

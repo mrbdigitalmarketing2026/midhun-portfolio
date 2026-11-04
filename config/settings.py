@@ -131,6 +131,10 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 
+# Resend Email API configuration
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+DEFAULT_FROM_EMAIL = "Midhun Portfolio <onboarding@resend.dev>"
+
 # Portfolio enquiry notification recipient
 ENQUIRY_NOTIFICATION_EMAIL = os.getenv(
     "ENQUIRY_NOTIFICATION_EMAIL",
