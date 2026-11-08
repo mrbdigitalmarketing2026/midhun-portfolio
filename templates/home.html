@@ -443,12 +443,48 @@
         </p>
 
         {% if messages %}
-          {% for message in messages %}
-            <div class="form-message {{ message.tags }}">
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
+  {% for message in messages %}
+
+    {% if 'success' in message.tags %}
+
+      <div class="success-popup-overlay" id="success-popup">
+        <div class="success-popup">
+
+          <button type="button"
+                  class="success-popup-close"
+                  onclick="document.getElementById('success-popup').remove();">
+            &times;
+          </button>
+
+          <div class="success-popup-icon">✓</div>
+
+          <h2>Thank You!</h2>
+
+          <p>{{ message }}</p>
+
+          <span class="success-popup-note">
+            LOOKING FORWARD TO CONNECTING WITH YOU.
+          </span>
+
+          <button type="button"
+                  class="button button-primary"
+                  onclick="document.getElementById('success-popup').remove();">
+            Got it
+          </button>
+
+        </div>
+      </div>
+
+    {% else %}
+
+      <div class="form-message {{ message.tags }}">
+        {{ message }}
+      </div>
+
+    {% endif %}
+
+  {% endfor %}
+{% endif %}
 
         <form method="POST" action="{% url 'home' %}" class="enquiry-form">
           {% csrf_token %}

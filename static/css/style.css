@@ -826,3 +826,124 @@ body::after {
         animation: none;
     }
 }
+
+/* SUCCESS POPUP */
+
+.success-popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(5, 5, 12, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    animation: popupFadeIn 0.35s ease;
+}
+
+.success-popup {
+    width: 100%;
+    max-width: 440px;
+    position: relative;
+    padding: 48px 35px 40px;
+    text-align: center;
+    background: linear-gradient(145deg, #171321, #0e0d15);
+    border: 1px solid rgba(167, 139, 250, 0.35);
+    border-radius: 18px;
+    box-shadow: 0 25px 90px rgba(0, 0, 0, 0.65),
+                0 0 45px rgba(139, 92, 246, 0.13);
+    animation: popupSlideUp 0.45s ease;
+}
+
+.success-popup-close {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    background: none;
+    border: none;
+    color: #a3a0ae;
+    font-size: 28px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.success-popup-close:hover {
+    color: #ffffff;
+}
+
+.success-popup-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 25px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #c4b5fd;
+    font-size: 34px;
+    font-weight: 600;
+    background: rgba(139, 92, 246, 0.15);
+    border: 1px solid rgba(167, 139, 250, 0.5);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+}
+
+.success-popup h2 {
+    color: #ffffff;
+    font: 600 32px var(--display);
+    margin: 0 0 15px;
+}
+
+.success-popup p {
+    color: #b7b2c3;
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0 auto 22px;
+}
+
+.success-popup-note {
+    display: block;
+    color: #a78bfa;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    line-height: 1.8;
+    margin-bottom: 28px;
+}
+
+.success-popup .button {
+    justify-content: center;
+    min-width: 130px;
+    border: none;
+    cursor: pointer;
+}
+
+@keyframes popupFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes popupSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 500px) {
+    .success-popup {
+        padding: 42px 23px 32px;
+    }
+
+    .success-popup h2 {
+        font-size: 28px;
+    }
+
+    .success-popup p {
+        font-size: 13px;
+    }
+}
